@@ -1,0 +1,37 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-text font-family="Helvetica" color="#333" />
+      <mj-button background-color="#111827" color="white" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f3f4f6">
+    <mj-section padding-top="20px">
+      <mj-column>
+        <mj-text align="center" font-size="24px" font-weight="bold">Booking Confirmed</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="white" padding="20px" border-radius="8px">
+      <mj-column>
+        <mj-text font-size="16px">Hi {{ user_name }},</mj-text>
+        <mj-text font-size="16px" line-height="1.5">
+          Your appointment for <strong>{{ event_title }}</strong> has been successfully booked.
+        </mj-text>
+        <mj-divider border-color="#e5e7eb" />
+        <mj-text font-size="14px" color="#6b7280">WHEN</mj-text>
+        <mj-text font-size="16px" font-weight="bold">{{ start_time }}</mj-text>
+        <mj-text font-size="14px" color="#6b7280" padding-top="15px">WHERE</mj-text>
+        <mj-text font-size="16px" font-weight="bold">{{ location }}</mj-text>
+        <mj-divider border-color="#e5e7eb" />
+        <mj-button href="{{ manage_link }}" width="100%">Manage Appointment</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-text align="center" font-size="12px" color="#9ca3af">
+          © 2024 Booking System. All rights reserved.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

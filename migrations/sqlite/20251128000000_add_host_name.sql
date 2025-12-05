@@ -1,0 +1,1 @@
+ALTER TABLE events ADD COLUMN host_name TEXT NOT NULL DEFAULT 'Dr. Privacy';

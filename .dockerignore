@@ -1,0 +1,16 @@
+target/
+.git/
+.gitignore
+.dockerignore
+.env
+.env.*
+*.db
+*.db-shm
+*.db-wal
+*.md
+.idea/
+.vscode/
+docker-compose.yaml
+docker-compose-image.yaml
+Dockerfile
+tests/

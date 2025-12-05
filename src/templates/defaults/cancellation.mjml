@@ -1,0 +1,14 @@
+<mjml>
+  <mj-body background-color="#f3f4f6">
+    <mj-section background-color="white" padding="20px" border-radius="8px" margin-top="20px">
+      <mj-column>
+        <mj-text font-size="20px" color="#ef4444" font-weight="bold">Booking Cancelled</mj-text>
+        <mj-text font-size="16px">Hi {{ user_name }},</mj-text>
+        <mj-text font-size="16px" line-height="1.5">
+          Your booking for <strong>{{ event_title }}</strong> has been cancelled.
+        </mj-text>
+        <mj-button href="{{ book_link }}" background-color="#111827" color="white">Book Again</mj-button>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

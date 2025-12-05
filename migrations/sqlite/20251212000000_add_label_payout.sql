@@ -1,0 +1,1 @@
+ALTER TABLE booking_labels ADD COLUMN payout TEXT NOT NULL DEFAULT '0€';
