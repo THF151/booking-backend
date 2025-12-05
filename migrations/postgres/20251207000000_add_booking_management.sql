@@ -1,5 +1,12 @@
 ALTER TABLE bookings ADD COLUMN status TEXT NOT NULL DEFAULT 'CONFIRMED';
 ALTER TABLE bookings ADD COLUMN management_token TEXT;
+
+UPDATE bookings
+SET management_token = gen_random_uuid()::text
+WHERE management_token IS NULL;
+
+ALTER TABLE bookings ALTER COLUMN management_token SET NOT NULL;
+
 -- Index for secure lookup
 CREATE INDEX idx_bookings_management_token ON bookings(management_token);
 -- Index for filtering availability
