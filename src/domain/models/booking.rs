@@ -19,6 +19,7 @@ pub struct Booking {
     pub label_id: Option<String>,
     pub status: String,
     pub management_token: String,
+    pub token: Option<String>,
     pub created_at: DateTime<Utc>,
 }
 
@@ -58,6 +59,7 @@ impl Booking {
             label_id: None,
             status: "CONFIRMED".to_string(),
             management_token: token,
+            token: None,
             created_at: Utc::now(),
         }
     }

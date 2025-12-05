@@ -108,6 +108,7 @@ pub struct UpdateBookingRequest {
     pub name: Option<String>,
     pub email: Option<String>,
     pub label_id: Option<String>,
+    pub token: Option<String>,
 }
 
 #[derive(Deserialize)]

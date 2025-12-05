@@ -234,6 +234,14 @@ pub async fn update_booking(
         }
     }
 
+    if let Some(t) = payload.token {
+        if t.is_empty() {
+            booking.token = None;
+        } else {
+            booking.token = Some(t);
+        }
+    }
+
     if let (Some(date_str), Some(time_str)) = (payload.date, payload.time) {
         let event = state.event_repo.find_by_id(&tenant_id, &booking.event_id).await?
             .ok_or(AppError::Internal)?;
