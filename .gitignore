@@ -1,6 +1,5 @@
 /target
 **/*.rs.bk
-Cargo.lock
 .env
 .env.production
 booking.db
