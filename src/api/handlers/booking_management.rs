@@ -52,6 +52,8 @@ pub async fn cancel_booking(
     let cancelled = state.booking_repo.cancel(&booking).await?;
     info!("Booking cancelled via management token: {}", booking.id);
 
+    state.job_repo.cancel_jobs_for_booking(&booking.id).await?;
+
     let rules = state.communication_repo.get_rules_by_trigger(&booking.tenant_id, Some(&event.id), "ON_CANCEL").await?;
     if !rules.is_empty() {
         for _rule in rules {
@@ -59,8 +61,6 @@ pub async fn cancel_booking(
             state.job_repo.create(&job).await?;
         }
     }
-
-    state.job_repo.cancel_jobs_for_booking(&booking.id).await?;
 
     Ok(Json(cancelled))
 }
