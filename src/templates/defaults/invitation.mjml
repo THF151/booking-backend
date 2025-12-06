@@ -1,39 +1,129 @@
 <mjml>
   <mj-head>
+    <mj-title>Invitation: {{ event_title }}</mj-title>
+    <mj-font name="Roboto" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" />
     <mj-attributes>
-      <mj-text font-family="Helvetica" color="#333" />
-      <mj-button background-color="#111827" color="white" />
+      <mj-all font-family="Roboto, Arial, sans-serif" />
+      <mj-text font-size="16px" line-height="1.6" color="#333333" />
+      <mj-section padding="0px" />
     </mj-attributes>
+    <mj-style>
+      .highlight-box {
+        background-color: #f8fafc;
+        border-radius: 8px;
+        padding: 24px;
+        border-left: 5px solid #009682;
+        margin: 24px 0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      }
+      .button-link a {
+        text-decoration: none !important;
+        color: #ffffff !important;
+      }
+      .info-label {
+        font-weight: 700;
+        color: #64748b;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    </mj-style>
   </mj-head>
-  <mj-body background-color="#f3f4f6">
-    <mj-section padding-top="20px">
+  <mj-body width="600px">
+
+    <!-- Header Band -->
+    <mj-section background-color="#009682" padding="6px 0"></mj-section>
+
+    <!-- Logo Section -->
+    <mj-section background-color="#ffffff" padding="40px 40px 20px 40px">
       <mj-column>
-        <mj-text align="center" font-size="24px" font-weight="bold">You are invited!</mj-text>
+        <mj-image width="160px" align="center" src="{{ logo_url }}" alt="Company Logo" padding="0" />
       </mj-column>
     </mj-section>
-    <mj-section background-color="white" padding="20px" border-radius="8px">
+
+    <!-- Main Content -->
+    <mj-section background-color="#ffffff" padding="0 40px 40px 40px">
       <mj-column>
-        <mj-text font-size="16px">Hello,</mj-text>
-        <mj-text font-size="16px" line-height="1.5">
-          You have been invited to book a slot for <strong>{{ event_title }}</strong>.
+
+        <!-- Headline -->
+        <mj-text font-size="28px" font-weight="800" color="#1e293b" padding-bottom="24px" line-height="1.2">
+          You are invited
         </mj-text>
-        <mj-divider border-color="#e5e7eb" />
-        <mj-text font-size="14px" color="#6b7280">EVENT DETAILS</mj-text>
-        <mj-text font-size="16px" font-weight="bold">{{ location }}</mj-text>
-        <mj-text font-size="14px" color="#6b7280" padding-top="5px">Duration: {{ duration }} min</mj-text>
-        <mj-divider border-color="#e5e7eb" />
-        <mj-text font-size="16px" line-height="1.5" align="center">
-          Please click the button below to select your preferred time and complete your booking.
+
+        <!-- Introduction -->
+        <mj-text padding-bottom="16px">
+          Dear {{ user_name }},
         </mj-text>
-        <mj-button href="{{ book_link }}" width="100%" padding-top="20px">Book Your Slot</mj-button>
+
+        <mj-text padding-bottom="16px">
+          We are pleased to invite you to participate in <strong>{{ event_title }}</strong>.
+        </mj-text>
+
+        <mj-text padding-bottom="16px">
+          {{ event_description }}
+        </mj-text>
+
+        <mj-text>
+          To make scheduling as convenient as possible, please use our booking portal to select your preferred time slot.
+        </mj-text>
+
+        <!-- Key Details Box -->
+        <mj-text padding="0">
+          <div class="highlight-box">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td class="info-label" style="padding-bottom: 4px;">Duration</td>
+              </tr>
+              <tr>
+                <td style="padding-bottom: 16px; color: #1e293b; font-weight: 500;">approx. {{ duration }} Minutes</td>
+              </tr>
+              <tr>
+                <td class="info-label" style="padding-bottom: 4px;">Compensation</td>
+              </tr>
+              <tr>
+                <td style="padding-bottom: 16px; color: #1e293b; font-weight: 500;">{{ payout }} </td>
+              </tr>
+              <tr>
+                <td class="info-label" style="padding-bottom: 4px;">Location</td>
+              </tr>
+              <tr>
+                <td style="color: #1e293b; font-weight: 500;">{{ location }}</td>
+              </tr>
+            </table>
+          </div>
+        </mj-text>
+
+        <!-- CTA -->
+        <mj-button href="{{ book_link }}" background-color="#009682" color="#ffffff" font-size="16px" font-weight="bold" border-radius="6px" inner-padding="16px 32px" align="center" padding-top="10px" padding-bottom="30px" css-class="button-link">
+          Book Your Slot
+        </mj-button>
+
+        <!-- Fallback Link -->
+        <mj-text font-size="13px" color="#94a3b8" align="center" line-height="1.5">
+          If the button above does not work, please copy and paste this link into your browser:<br/>
+          <a href="{{ book_link }}" style="color:#009682;text-decoration:none;">{{ book_link }}</a>
+        </mj-text>
+
+        <mj-divider border-width="1px" border-color="#e2e8f0" padding-top="40px" padding-bottom="30px" />
+
+        <!-- Sign-off -->
+        <mj-text font-size="16px" color="#333333">
+          Best regards,<br/>
+          <strong style="color: #1e293b;">{{ tenant_name }}</strong>
+        </mj-text>
+
       </mj-column>
     </mj-section>
-    <mj-section>
+
+    <!-- Footer -->
+    <mj-section padding="24px 0 40px 0">
       <mj-column>
-        <mj-text align="center" font-size="12px" color="#9ca3af">
-          © 2024 Booking System. All rights reserved.
+        <mj-text font-size="12px" color="#94a3b8" align="center" line-height="1.5">
+          {{ tenant_name }}<br/>
+          Powered by Orsee++
         </mj-text>
       </mj-column>
     </mj-section>
+
   </mj-body>
 </mjml>

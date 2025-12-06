@@ -222,12 +222,17 @@ pub async fn get_placeholders() -> impl IntoResponse {
     let placeholders = vec![
         TemplatePlaceholder { key: "user_name".to_string(), description: "Customer Name".to_string(), sample_value: "John Doe".to_string() },
         TemplatePlaceholder { key: "event_title".to_string(), description: "Event Title".to_string(), sample_value: "Consultation Call".to_string() },
+        TemplatePlaceholder { key: "event_description".to_string(), description: "Event Description".to_string(), sample_value: "Detailed description of the event.".to_string() },
         TemplatePlaceholder { key: "start_time".to_string(), description: "Booking Start Time".to_string(), sample_value: "2023-10-15 14:00".to_string() },
         TemplatePlaceholder { key: "location".to_string(), description: "Event Location".to_string(), sample_value: "Zoom Meeting".to_string() },
         TemplatePlaceholder { key: "duration".to_string(), description: "Duration (min)".to_string(), sample_value: "30".to_string() },
+        TemplatePlaceholder { key: "payout".to_string(), description: "Payout Amount".to_string(), sample_value: "20".to_string() },
+        TemplatePlaceholder { key: "tenant_name".to_string(), description: "Tenant Name".to_string(), sample_value: "Research Institute".to_string() },
+        TemplatePlaceholder { key: "logo_url".to_string(), description: "Tenant Logo URL".to_string(), sample_value: "https://example.com/logo.png".to_string() },
         TemplatePlaceholder { key: "manage_link".to_string(), description: "Link to manage booking".to_string(), sample_value: "https://example.com/manage/123".to_string() },
         TemplatePlaceholder { key: "token".to_string(), description: "Invitee Token".to_string(), sample_value: "abc-123-xyz".to_string() },
         TemplatePlaceholder { key: "book_link".to_string(), description: "Direct booking link (Invite)".to_string(), sample_value: "https://example.com/book?token=abc".to_string() },
+        TemplatePlaceholder { key: "booking_link".to_string(), description: "Alias for book_link".to_string(), sample_value: "https://example.com/book?token=abc".to_string() },
     ];
     Json(placeholders)
 }

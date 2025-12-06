@@ -91,6 +91,9 @@ async fn process_job(
     let payload_id = &job.payload.booking_id;
     let tenant_id = &job.payload.tenant_id;
 
+    let tenant = state.tenant_repo.find_by_id(tenant_id).await?
+        .ok_or(crate::error::AppError::NotFound(format!("Tenant {} not found", tenant_id)))?;
+
     if job.job_type.starts_with("CAMPAIGN:") {
         info!("Handling CAMPAIGN job type: {}", job.job_type);
         let parts: Vec<&str> = job.job_type.split(':').collect();
@@ -128,8 +131,11 @@ async fn process_job(
         context_map.insert("location".to_string(), json!(event.location));
         context_map.insert("duration".to_string(), json!(event.duration_min));
         context_map.insert("timezone".to_string(), json!(event.timezone));
+        context_map.insert("payout".to_string(), json!(event.payout));
+        context_map.insert("tenant_name".to_string(), json!(tenant.name));
+        context_map.insert("logo_url".to_string(), json!(tenant.logo_url.unwrap_or_default()));
 
-        let base_url = "http://localhost:3000";
+        let base_url = "http://localhost:3000"; // Should be config
 
         if target_type == "BOOKING" {
             let booking = state.booking_repo.find_by_id(tenant_id, payload_id).await?.unwrap();
@@ -149,6 +155,7 @@ async fn process_job(
                 let book_link = format!("{}/en/book/{}/{}?accessToken={}", base_url, tenant_id, event.slug, token_str);
                 context_map.insert("link".to_string(), json!(book_link));
                 context_map.insert("book_link".to_string(), json!(book_link));
+                context_map.insert("booking_link".to_string(), json!(book_link));
             }
         }
 
@@ -183,6 +190,12 @@ async fn process_job(
     let mut context = tera::Context::new();
     context.insert("user_name", &booking.customer_name);
     context.insert("event_title", &event.title_en);
+    context.insert("event_description", &event.desc_en);
+
+    // New Variables
+    context.insert("tenant_name", &tenant.name);
+    context.insert("logo_url", &tenant.logo_url.unwrap_or_default());
+    context.insert("payout", &event.payout);
 
     let tz: Tz = event.timezone.parse().unwrap_or(chrono_tz::UTC);
     let event_time = booking.start_time.with_timezone(&tz);
@@ -194,22 +207,18 @@ async fn process_job(
     context.insert("location", display_location);
     context.insert("duration", &event.duration_min);
 
-    let base_url = "http://localhost:3000";
+    let base_url = "http://localhost:3000"; // Should be config
     let manage_link = format!("{}/en/manage/{}", base_url, booking.management_token);
     context.insert("manage_link", &manage_link);
     let book_link = format!("{}/en/book/{}/{}", base_url, tenant_id, event.slug);
     context.insert("book_link", &book_link);
-
-    // Determine trigger based on job type OR try to match based on what's stored in job_type
-    // If we stored "REMINDER_24H" in job_type (which we do in updated reschedule logic), we use that.
-    // If it's just "REMINDER", we guess.
+    context.insert("booking_link", &book_link); // Alias
 
     let mut resolved_trigger = job.job_type.clone();
     if resolved_trigger == "CONFIRMATION" { resolved_trigger = "ON_BOOKING".to_string(); }
     else if resolved_trigger == "CANCELLATION" { resolved_trigger = "ON_CANCEL".to_string(); }
     else if resolved_trigger == "RESCHEDULE" { resolved_trigger = "ON_RESCHEDULE".to_string(); }
     else if resolved_trigger == "REMINDER" {
-        // Legacy/Fallback guess
         let diff = booking.start_time - job.execute_at;
         if diff.num_hours() >= 23 { resolved_trigger = "REMINDER_24H".to_string(); }
         else { resolved_trigger = "REMINDER_1H".to_string(); }

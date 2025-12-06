@@ -29,29 +29,34 @@ pub async fn generate_content(
 
     let api_key = tenant.ai_api_key.ok_or(AppError::Validation("AI API Key not configured for this tenant".into()))?;
 
+    // Enriched System Prompt for Enterprise Quality
     let system_prompt = format!(
-        r#"You are an expert email marketing assistant for a booking system.
-        Your task is to modify or generate email content based on the user's request.
+        r#"You are an expert email marketing assistant for a professional booking system used by the organization "{tenant_name}".
+
+        YOUR GOAL:
+        Modify or generate email content (MJML or HTML) based on the user's request, strictly adhering to the context and available variables.
 
         CONTEXT:
-        - Tenant Name: {}
-        - Content Type: {} (MJML or HTML email body)
+        - Tenant Name: {tenant_name}
+        - Content Type: {content_type} (You must output valid code of this type)
+        - Available Variables: {variables:?}
+          (Use ONLY these variables in the format `{{{{ variable_name }}}}`. Do not invent new ones.)
 
-        RULES:
-        1. Output ONLY the resulting content (MJML or HTML). Do not include markdown code blocks or explanations.
-        2. You MUST preserve the structure valid for MJML if the input looks like MJML.
-        3. You MUST use the following variables correctly where appropriate:
-           {:?}
-           (Do not invent new variables. Use {{ variable_name }} syntax).
-        4. Keep the tone professional and helpful.
-        "#,
-        tenant.name,
-        payload.context_type,
-        payload.variables
+        STRICT RULES:
+        1. OUTPUT FORMAT: Return ONLY the raw code (MJML or HTML). Do NOT wrap it in markdown code blocks (like ```html). Do NOT add conversational filler ("Here is your email...").
+        2. INTEGRITY: If the input is MJML, the output MUST be valid MJML. Do not break the XML structure.
+        3. TONE: Professional, clear, and polite. Suitable for business or academic communication.
+        4. VARIABLES: Ensure variables like `{{{{ manage_link }}}}` or `{{{{ book_link }}}}` are preserved in buttons/links if they existed or if the user asks for a call to action.
+        5. DO NOT remove the unsubscribe/footer section if it exists, unless explicitly asked.
+
+        If the user request is ambiguous, default to a standard professional style."#,
+        tenant_name = tenant.name,
+        content_type = payload.context_type,
+        variables = payload.variables
     );
 
     let user_prompt = format!(
-        "Current Content:\n{}\n\nUser Request: {}",
+        "CURRENT CONTENT:\n{}\n\nUSER REQUEST:\n{}",
         payload.current_content,
         payload.prompt
     );

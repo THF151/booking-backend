@@ -1,36 +1,70 @@
 <mjml>
   <mj-head>
+    <mj-title>Booking Confirmation: {{ event_title }}</mj-title>
+    <mj-font name="Roboto" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" />
     <mj-attributes>
-      <mj-text font-family="Helvetica" color="#333" />
-      <mj-button background-color="#111827" color="white" />
+      <mj-all font-family="Roboto, Arial, sans-serif" />
+      <mj-text font-size="16px" line-height="1.6" color="#333333" />
+      <mj-section padding="0px" />
     </mj-attributes>
+    <mj-style>
+      .highlight-box {
+        background-color: #e6f5f3;
+        border-radius: 8px;
+        padding: 20px;
+        border-left: 5px solid #009682;
+        margin: 20px 0;
+      }
+      .secondary-button-link a {
+          text-decoration: none !important;
+          color: #009682 !important;
+      }
+    </mj-style>
   </mj-head>
-  <mj-body background-color="#f3f4f6">
-    <mj-section padding-top="20px">
+  <mj-body>
+    <mj-section background-color="#009682" padding="5px 20px"></mj-section>
+
+    <mj-section background-color="#ffffff" padding="30px 20px 10px 20px">
       <mj-column>
-        <mj-text align="center" font-size="24px" font-weight="bold">Booking Confirmed</mj-text>
+        <mj-image width="180px" src="{{ logo_url }}" alt="Company Logo" />
       </mj-column>
     </mj-section>
-    <mj-section background-color="white" padding="20px" border-radius="8px">
-      <mj-column>
-        <mj-text font-size="16px">Hi {{ user_name }},</mj-text>
-        <mj-text font-size="16px" line-height="1.5">
-          Your appointment for <strong>{{ event_title }}</strong> has been successfully booked.
+
+    <mj-section background-color="#ffffff" padding="10px 20px 40px 20px">
+      <mj-column width="600px">
+        <mj-text font-size="24px" font-weight="700" color="#009682">Booking Confirmed</mj-text>
+        <mj-text padding-top="20px">Hi {{ user_name }},</mj-text>
+        <mj-text>Your appointment for <strong>{{ event_title }}</strong> has been successfully booked. We look forward to seeing you.</mj-text>
+
+        <mj-text padding="0px">
+          <div class="highlight-box">
+            <p style="margin:0;font-size:14px;font-weight:700;color:#009682;text-transform:uppercase;letter-spacing:0.5px;">Appointment Details</p>
+            <ul style="margin:10px 0 0 0;padding-left:20px;color:#555555;font-size:15px;">
+              <li style="margin-bottom:5px;"><strong>Date & Time:</strong> {{ start_time }} ({{ timezone }})</li>
+              <li style="margin-bottom:5px;"><strong>Location:</strong> {{ location }}</li>
+              <li><strong>Duration:</strong> {{ duration }} min</li>
+            </ul>
+          </div>
         </mj-text>
-        <mj-divider border-color="#e5e7eb" />
-        <mj-text font-size="14px" color="#6b7280">WHEN</mj-text>
-        <mj-text font-size="16px" font-weight="bold">{{ start_time }}</mj-text>
-        <mj-text font-size="14px" color="#6b7280" padding-top="15px">WHERE</mj-text>
-        <mj-text font-size="16px" font-weight="bold">{{ location }}</mj-text>
-        <mj-divider border-color="#e5e7eb" />
-        <mj-button href="{{ manage_link }}" width="100%">Manage Appointment</mj-button>
+
+        <mj-text>A calendar invitation (.ics) is attached to this email for your convenience.</mj-text>
+        <mj-divider border-width="1px" border-color="#e0e0e0" padding-top="30px" padding-bottom="30px" />
+
+        <mj-text font-size="18px" font-weight="600" color="#333333">Need to change your plans?</mj-text>
+        <mj-text>You can cancel or reschedule your appointment using the link below.</mj-text>
+
+        <mj-button href="{{ manage_link }}" background-color="#ffffff" color="#009682" border="1px solid #009682" font-size="15px" font-weight="bold" border-radius="6px" inner-padding="12px 25px" css-class="secondary-button-link">Manage Appointment</mj-button>
+
+        <mj-text font-size="12px" color="#999999" padding-top="10px">Or copy this link: <a href="{{ manage_link }}" style="color:#009682;">{{ manage_link }}</a></mj-text>
+
+        <mj-text padding-top="30px" font-size="16px" color="#333333">Best regards,<br/><strong>{{ tenant_name }}</strong></mj-text>
       </mj-column>
     </mj-section>
-    <mj-section>
+
+    <mj-section padding="20px" background-color="#f4f4f4">
       <mj-column>
-        <mj-text align="center" font-size="12px" color="#9ca3af">
-          © 2024 Booking System. All rights reserved.
-        </mj-text>
+        <mj-divider border-width="1px" border-color="#e2e8f0" />
+        <mj-text font-size="12px" color="#64748b" align="center" padding-top="20px" line-height="1.4">{{ tenant_name }}<br/>Powered by Orsee++</mj-text>
       </mj-column>
     </mj-section>
   </mj-body>
