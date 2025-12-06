@@ -109,6 +109,7 @@ pub struct UpdateBookingRequest {
     pub email: Option<String>,
     pub label_id: Option<String>,
     pub token: Option<String>,
+    pub payout: Option<i32>,
 }
 
 #[derive(Deserialize)]
@@ -125,6 +126,13 @@ pub struct EventOverrideRequest {
 pub struct CreateLabelRequest {
     pub name: String,
     pub color: String,
+    pub payout: Option<i32>,
+}
+
+#[derive(Deserialize)]
+pub struct UpdateLabelRequest {
+    pub name: Option<String>,
+    pub color: Option<String>,
     pub payout: Option<i32>,
 }
 

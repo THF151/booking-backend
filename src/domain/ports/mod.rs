@@ -91,6 +91,8 @@ pub trait BookingRepository: Send + Sync {
 #[async_trait]
 pub trait BookingLabelRepository: Send + Sync {
     async fn create(&self, label: &BookingLabel) -> Result<BookingLabel, AppError>;
+    async fn find_by_id(&self, id: &str) -> Result<Option<BookingLabel>, AppError>;
+    async fn update(&self, label: &BookingLabel) -> Result<BookingLabel, AppError>;
     async fn list(&self, tenant_id: &str) -> Result<Vec<BookingLabel>, AppError>;
     async fn delete(&self, tenant_id: &str, id: &str) -> Result<(), AppError>;
 }

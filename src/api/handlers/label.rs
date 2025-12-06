@@ -1,7 +1,7 @@
 use axum::{extract::{State, Path}, response::IntoResponse, Json};
 use crate::state::AppState;
 use crate::api::extractors::{auth::AuthUser, tenant::TenantId};
-use crate::api::dtos::requests::CreateLabelRequest;
+use crate::api::dtos::requests::{CreateLabelRequest, UpdateLabelRequest};
 use crate::domain::models::booking::BookingLabel;
 use crate::error::AppError;
 use std::sync::Arc;
@@ -27,6 +27,29 @@ pub async fn create_label(
     let created = state.label_repo.create(&label).await?;
     info!("Created label: {} with payout {}€", created.name, created.payout);
     Ok(Json(created))
+}
+
+pub async fn update_label(
+    State(state): State<Arc<AppState>>,
+    TenantId(tenant_id): TenantId,
+    _user: AuthUser,
+    Path((_, label_id)): Path<(String, String)>,
+    Json(payload): Json<UpdateLabelRequest>,
+) -> Result<impl IntoResponse, AppError> {
+    let mut label = state.label_repo.find_by_id(&label_id).await?
+        .ok_or(AppError::NotFound("Label not found".into()))?;
+
+    if label.tenant_id != tenant_id {
+        return Err(AppError::NotFound("Label not found".into()));
+    }
+
+    if let Some(name) = payload.name { label.name = name; }
+    if let Some(color) = payload.color { label.color = color; }
+    if let Some(payout) = payload.payout { label.payout = payout; }
+
+    let updated = state.label_repo.update(&label).await?;
+    info!("Updated label: {} ({})", updated.name, updated.id);
+    Ok(Json(updated))
 }
 
 pub async fn delete_label(

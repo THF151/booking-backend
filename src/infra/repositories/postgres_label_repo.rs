@@ -30,6 +30,25 @@ impl BookingLabelRepository for PostgresLabelRepo {
             .map_err(AppError::Database)
     }
 
+    async fn find_by_id(&self, id: &str) -> Result<Option<BookingLabel>, AppError> {
+        sqlx::query_as::<_, BookingLabel>("SELECT * FROM booking_labels WHERE id = $1")
+            .bind(id)
+            .fetch_optional(&self.pool).await.map_err(AppError::Database)
+    }
+
+    async fn update(&self, label: &BookingLabel) -> Result<BookingLabel, AppError> {
+        sqlx::query_as::<_, BookingLabel>(
+            "UPDATE booking_labels SET name=$1, color=$2, payout=$3 WHERE id=$4 RETURNING *"
+        )
+            .bind(&label.name)
+            .bind(&label.color)
+            .bind(label.payout)
+            .bind(&label.id)
+            .fetch_one(&self.pool)
+            .await
+            .map_err(AppError::Database)
+    }
+
     async fn list(&self, tenant_id: &str) -> Result<Vec<BookingLabel>, AppError> {
         sqlx::query_as::<_, BookingLabel>(
             "SELECT * FROM booking_labels WHERE tenant_id = $1 ORDER BY created_at ASC"

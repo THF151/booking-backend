@@ -38,7 +38,7 @@ pub fn create_router(state: Arc<AppState>) -> Router {
 
         // Config
         .route("/api/v1/{tenant_id}/labels", get(label::list_labels).post(label::create_label))
-        .route("/api/v1/{tenant_id}/labels/{label_id}", delete(label::delete_label))
+        .route("/api/v1/{tenant_id}/labels/{label_id}", delete(label::delete_label).put(label::update_label))
 
         // Communication - Templates
         .route("/api/v1/{tenant_id}/templates", get(communication::list_templates).post(communication::create_template))

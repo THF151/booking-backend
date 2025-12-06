@@ -163,11 +163,11 @@ pub async fn create_booking(
             _ => {
                 if rule.trigger_type.starts_with("REMINDER_") && rule.trigger_type.ends_with("M")
                     && let Ok(minutes) = rule.trigger_type[9..rule.trigger_type.len()-1].parse::<i64>() {
-                        let remind_at = booking.start_time - Duration::minutes(minutes);
-                        if remind_at > Utc::now() {
-                            jobs.push(Job::new("REMINDER", booking.id.clone(), tenant_id.clone(), remind_at));
-                        }
+                    let remind_at = booking.start_time - Duration::minutes(minutes);
+                    if remind_at > Utc::now() {
+                        jobs.push(Job::new("REMINDER", booking.id.clone(), tenant_id.clone(), remind_at));
                     }
+                }
             }
         }
     }
@@ -232,6 +232,10 @@ pub async fn update_booking(
         } else {
             booking.label_id = Some(label_id);
         }
+    }
+
+    if let Some(payout) = payload.payout {
+        booking.payout = Some(payout);
     }
 
     if let Some(t) = payload.token {

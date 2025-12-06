@@ -30,6 +30,25 @@ impl BookingLabelRepository for SqliteLabelRepo {
             .map_err(AppError::Database)
     }
 
+    async fn find_by_id(&self, id: &str) -> Result<Option<BookingLabel>, AppError> {
+        sqlx::query_as::<_, BookingLabel>("SELECT * FROM booking_labels WHERE id = ?")
+            .bind(id)
+            .fetch_optional(&self.pool).await.map_err(AppError::Database)
+    }
+
+    async fn update(&self, label: &BookingLabel) -> Result<BookingLabel, AppError> {
+        sqlx::query_as::<_, BookingLabel>(
+            "UPDATE booking_labels SET name=?, color=?, payout=? WHERE id=? RETURNING *"
+        )
+            .bind(&label.name)
+            .bind(&label.color)
+            .bind(label.payout)
+            .bind(&label.id)
+            .fetch_one(&self.pool)
+            .await
+            .map_err(AppError::Database)
+    }
+
     async fn list(&self, tenant_id: &str) -> Result<Vec<BookingLabel>, AppError> {
         sqlx::query_as::<_, BookingLabel>(
             "SELECT * FROM booking_labels WHERE tenant_id = ? ORDER BY created_at ASC"
