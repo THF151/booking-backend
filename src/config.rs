@@ -9,6 +9,7 @@ pub struct Config {
     pub jwt_secret_key: String, // Private key (PEM or Base64)
     pub jwt_public_key: String, // Public key (PEM or Base64)
     pub auth_issuer: String,
+    pub frontend_url: String,
 }
 
 impl Config {
@@ -21,6 +22,7 @@ impl Config {
             jwt_secret_key: env::var("JWT_SECRET_KEY").expect("JWT_SECRET_KEY must be set (Ed25519 Private Key)"),
             jwt_public_key: env::var("JWT_PUBLIC_KEY").expect("JWT_PUBLIC_KEY must be set (Ed25519 Public Key)"),
             auth_issuer: env::var("AUTH_ISSUER").unwrap_or_else(|_| "https://api.booking-system.local".to_string()),
+            frontend_url: env::var("FRONTEND_URL").unwrap_or_else(|_| "http://localhost:3000".to_string()),
         }
     }
 }

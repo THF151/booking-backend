@@ -135,7 +135,7 @@ async fn process_job(
         context_map.insert("tenant_name".to_string(), json!(tenant.name));
         context_map.insert("logo_url".to_string(), json!(tenant.logo_url.unwrap_or_default()));
 
-        let base_url = "http://localhost:3000"; // Should be config
+        let base_url = &state.config.frontend_url;
 
         if target_type == "BOOKING" {
             let booking = state.booking_repo.find_by_id(tenant_id, payload_id).await?.unwrap();
@@ -207,7 +207,7 @@ async fn process_job(
     context.insert("location", display_location);
     context.insert("duration", &event.duration_min);
 
-    let base_url = "http://localhost:3000"; // Should be config
+    let base_url = &state.config.frontend_url;
     let manage_link = format!("{}/en/manage/{}", base_url, booking.management_token);
     context.insert("manage_link", &manage_link);
     let book_link = format!("{}/en/book/{}/{}", base_url, tenant_id, event.slug);

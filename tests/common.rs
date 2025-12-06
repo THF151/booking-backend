@@ -112,6 +112,7 @@ impl TestApp {
             jwt_secret_key: priv_key_pem.to_string(),
             jwt_public_key: pub_key_pem.to_string(),
             auth_issuer: "test-issuer".to_string(),
+            frontend_url: "http://localhost:3000".to_string(),
         };
 
         let auth_repo = Arc::new(SqliteAuthRepo::new(pool.clone()));
